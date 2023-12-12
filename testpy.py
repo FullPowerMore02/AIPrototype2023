@@ -81,8 +81,8 @@ def parse_import():
 def printHello():
     print("Hello World")
 
-def multiplyby9(inputV):
-    print(9 * inputV)
+def multiplyby9(input_v):
+    print(input_v)
 
 if __name__ == "__main__":
     input_v = parse_import()
@@ -91,4 +91,4 @@ if __name__ == "__main__":
     multiplyby9(input_v.num)
     printHello()
 
-    
+#########

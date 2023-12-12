@@ -72,7 +72,7 @@ def parse_input():
     parser.add_argument(
         '--XX',
         type=int,
-        required=7,
+        default=7,
         help='input for XX function'
     )
     args = parser.parse_args()

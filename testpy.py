@@ -60,7 +60,7 @@
     #printHello()
 import argparse
 
-def parse_import():
+def parse_input():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(

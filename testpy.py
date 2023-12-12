@@ -33,6 +33,31 @@
   #  print('we are in the main function')
  #   multiplyby9(20)
    # printHello()
+#import argparse
+
+#def parse_import():
+ #   parser = argparse.ArgumentParser()
+
+  ##     '--num',
+    #    type=int,
+     #   required=True,
+      #  help='input for the multiplyby9 function'
+    #)
+   # args = parser.parse_args()
+   # return args
+
+#def printHello():
+ #   print("Hello World")
+
+#def multiplyby9(inputV):
+ #   print(9 * inputV)
+     
+#if __name__ == "__main__":
+ #   input_v = parse_import()
+  #  print(f'the input num is {input_v.num}')
+   # print('we are in the main function')
+    #multiplyby9(input_v.num)
+    #printHello()
 import argparse
 
 def parse_import():
@@ -43,6 +68,12 @@ def parse_import():
         type=int,
         required=True,
         help='input for the multiplyby9 function'
+    )
+    parser.add_argument(
+        '--XX',
+        type=int,
+        required=True,
+        help='input for XX function'
     )
     args = parser.parse_args()
     return args
@@ -56,7 +87,9 @@ def multiplyby9(inputV):
 if __name__ == "__main__":
     input_v = parse_import()
     print(f'the input num is {input_v.num}')
+    print(f'the input XX is {input_v.XX}')
     print('we are in the main function')
     multiplyby9(input_v.num)
     printHello()
 
+    

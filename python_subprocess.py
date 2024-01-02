@@ -8,7 +8,14 @@ if __name__ == "__main__" :
         subprocess.run(['python3','testpy.py','--num','0','--XX','7'])
 
         process_output = subprocess.Popen("python","firstpy.py","--num","0")
+        output, _ = process_output.communicate()
 
+    # Extract the last numbers from the output and convert to integers
+        last_numbers = [int(number) for number in output.decode().split()]
+
+    # Sum up the last numbers and print the total result
+        total_result = sum(last_numbers)
+        print(f"The total result is: {total_result}")
         ######
 #import subprocess
 

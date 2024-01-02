@@ -1,42 +1,42 @@
-#import subprocess
-
-#if __name__ == "__main__" :
- #       subprocess.run(['ls','-ltr'])
-  #      subprocess.run(['rm','-r','/home/Pongpicha/testfolder1'])
-   #     subprocess.run(['python','testpy.py','--num','100','--XX','90'])
-    #    subprocess.run(['python','testpy.py','--num','10','--XX','-90'])
-     #   subprocess.run(['python','testpy.py','--num','0','--XX','7'])
-
-      #  process_output = subprocess.Popen("python","firstpy.py","--num","0")
-
-        ######
 import subprocess
 
-def run_and_capture_output(command):
-    return int(subprocess.check_output(command).decode())
+if __name__ == "__main__" :
+        subprocess.run(['ls','-ltr'])
+        subprocess.run(['rm','-r','/home/Pongpicha/testfolder1'])
+        subprocess.run(['python3','testpy.py','--num','100','--XX','90'])
+        subprocess.run(['python3','testpy.py','--num','10','--XX','-90'])
+        subprocess.run(['python3','testpy.py','--num','0','--XX','7'])
 
-if __name__ == "__main__":
-    subprocess.run(['ls', '-ltr'])
-    subprocess.run(['rm', '-r', '/home/Pongpicha/testfolder1'])
+        process_output = subprocess.Popen("python","firstpy.py","--num","0")
+
+        ######
+#import subprocess
+
+#def run_and_capture_output(command):
+ #   return int(subprocess.check_output(command).decode())
+
+#if __name__ == "__main__":
+ #   subprocess.run(['ls', '-ltr'])
+  #  subprocess.run(['rm', '-r', '/home/Pongpicha/testfolder1'])
 
     # Define the subprocess commands
-    commands = [
-        ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
-        ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
-        ['python3', 'testpy.py', '--num', '0', '--XX', '7']
-    ]
+   # commands = [
+    #    ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
+     #   ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
+      #  ['python3', 'testpy.py', '--num', '0', '--XX', '7']
+    #]
 
     # Extract the last numbers from each command and convert to integers
-    last_command_first_two_numbers = [int(command[i]) for i in range(2)]
+    #last_command_first_two_numbers = [int(command[i]) for i in range(2)]
 
     # Extract the last two numbers from each command and convert to integers
-    last_two_numbers = [int(command[-2]) for command in commands]
+    #last_two_numbers = [int(command[-2]) for command in commands]
 
     # Sum up the values and print the total result
-    total_result = sum(last_two_numbers + last_command_first_two_numbers)
-    print(f"The total result is: {total_result}")
-    results = [run_and_capture_output(command) for command in commands]
-    
+    #total_result = sum(last_two_numbers + last_command_first_two_numbers)
+    #print(f"The total result is: {total_result}")
+    #results = [run_and_capture_output(command) for command in commands]
+
     # Sum up the values and print the total result
    # total_result = sum(results)
   #  print(f"The total result is: {total_result}")

@@ -16,8 +16,11 @@ import subprocess
 
 def run_and_capture_output(command):
     result = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    last_line = result.stdout.strip().split('\n')[-1]
-    return int(last_line)
+    numeric_lines = [line for line in result.stdout.strip().split('\n') if line.isdigit()]
+    if numeric_lines:
+        return int(numeric_lines[-1])
+    else:
+        return 0  # Default value if no numeric lines are found
 
 if __name__ == "__main__":
     subprocess.run(['ls', '-ltr'])
@@ -36,6 +39,7 @@ if __name__ == "__main__":
     # Sum up the last numbers and print the total result
     total_result = sum(last_numbers)
     print(f"The total result is: {total_result}")
+
 
 
 

@@ -57,9 +57,9 @@ def run_and_capture_output(command):
 if __name__ == "__main__":
     # กำหนดคำสั่ง subprocess
     commands = [
-        ['python', 'testpy.py', '--num', '100', '--XX', '90'],
-        ['python', 'testpy.py', '--num', '10', '--XX', '-90'],
-        ['python', 'testpy.py', '--num', '0', '--XX', '7']
+        ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
+        ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
+        ['python3', 'testpy.py', '--num', '0', '--XX', '7']
     ]
 
     # สร้างรายการผลลัพธ์จากการรัน subprocess

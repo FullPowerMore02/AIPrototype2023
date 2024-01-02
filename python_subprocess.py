@@ -16,21 +16,31 @@ import subprocess
 
 if __name__ == "__main__":
     subprocess.run(['ls', '-ltr'])
-    subprocess.run(['rm', '-r', '/home/Pongpicha/testfolder1'])
+    subprocess.run(['rm', '-r', '/home/Pongpicha/testfolder1'], errors='ignore')
 
-    # กำหนดตำแหน่งตัวเลขจากผลลัพธ์ของแต่ละคำสั่ง
-    position_90 = 2
+    # ระบุตำแหน่งที่มีเลข
+    position_90 = 3
     position_minus_90 = 4
-    position_0 = 4
+    position_0 = 5
 
-    # ดึงตัวเลขจากผลลัพธ์ของแต่ละคำสั่ง
-    number_90 = int(subprocess.run(['python3', 'testpy.py', '--num', '100', '--XX', '90'], stdout=subprocess.PIPE, text=True).stdout.split()[position_90])
-    number_minus_90 = int(subprocess.run(['python3', 'testpy.py', '--num', '10', '--XX', '-90'], stdout=subprocess.PIPE, text=True).stdout.split()[position_minus_90])
-    number_0 = int(subprocess.run(['python3', 'testpy.py', '--num', '0', '--XX', '7'], stdout=subprocess.PIPE, text=True).stdout.split()[position_0])
+    # วนลูปผ่านคำสั่งและดึงผลลัพธ์
+    numbers = []
+    for command in [
+        ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
+        ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
+        ['python3', 'testpy.py', '--num', '0', '--XX', '7']
+    ]:
+        output = subprocess.run(command, stdout=subprocess.PIPE, text=True).stdout
+        # ตรวจสอบและดึงตัวเลขจากผลลัพธ์
+        number = [int(word) for word in output.split() if word.isdigit()]
+        if number:
+            numbers.append(number[0])
 
-    # รวมตัวเลขที่ระบุและพิมพ์ผลรวมทั้งหมด
-    total_result = number_90 + number_minus_90 + number_0
-    print(f"The total result is: {total_result}")
+    # พิมพ์ตำแหน่งของเลข 90, -90, และ 0
+    print(f"Position of 90: {numbers[position_90 - 1]}")
+    print(f"Position of -90: {numbers[position_minus_90 - 1]}")
+    print(f"Position of 0: {numbers[position_0 - 1]}")
+
 
 
 

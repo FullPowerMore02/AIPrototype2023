@@ -21,9 +21,9 @@ if __name__ == "__main__":
 
     # Define the subprocess commands
     commands = [
-        ['python', 'testpy.py', '--num', '100', '--XX', '90'],
-        ['python', 'testpy.py', '--num', '10', '--XX', '-90'],
-        ['python', 'testpy.py', '--num', '0', '--XX', '7']
+        ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
+        ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
+        ['python3', 'testpy.py', '--num', '0', '--XX', '7']
     ]
 
     # Extract the last numbers from each command and convert to integers

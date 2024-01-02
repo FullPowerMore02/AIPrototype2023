@@ -27,8 +27,13 @@ if __name__ == "__main__":
     ]
 
     # Extract the last numbers from each command and convert to integers
-    last_numbers = [int(command[-1]) for command in commands]
+    #last_numbers = [int(command[-1]) for command in commands]
 
     # Sum up the values and print the total result
-    total_result = sum(last_numbers)
+   # total_result = sum(last_numbers)
+    #print(f"The total result is: {total_result}")
+    results = [run_and_capture_output(command) for command in commands]
+
+    # Sum up the values and print the total result
+    total_result = sum(results)
     print(f"The total result is: {total_result}")

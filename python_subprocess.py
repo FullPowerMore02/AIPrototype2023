@@ -14,31 +14,24 @@
 
 import subprocess
 
-def run_and_capture_output(command):
-    result = subprocess.run(command, stdout=subprocess.PIPE, text=True)
-    numeric_lines = [line for line in result.stdout.strip().split('\n') if line.isdigit()]
-    if numeric_lines:
-        return int(numeric_lines[-1])
-    else:
-        return 0  # Default value if no numeric lines are found
-
 if __name__ == "__main__":
     subprocess.run(['ls', '-ltr'])
     subprocess.run(['rm', '-r', '/home/Pongpicha/testfolder1'])
 
-    # Define the subprocess commands
-    commands = [
-        ['python3', 'testpy.py', '--num', '100', '--XX', '90'],
-        ['python3', 'testpy.py', '--num', '10', '--XX', '-90'],
-        ['python3', 'testpy.py', '--num', '0', '--XX', '7']
-    ]
+    # กำหนดตำแหน่งตัวเลขจากผลลัพธ์ของแต่ละคำสั่ง
+    position_90 = 2
+    position_minus_90 = 4
+    position_0 = 4
 
-    # Extract the last numbers from each command and convert to integers
-    last_numbers = [run_and_capture_output(command) for command in commands]
+    # ดึงตัวเลขจากผลลัพธ์ของแต่ละคำสั่ง
+    number_90 = int(subprocess.run(['python3', 'testpy.py', '--num', '100', '--XX', '90'], stdout=subprocess.PIPE, text=True).stdout.split()[position_90])
+    number_minus_90 = int(subprocess.run(['python3', 'testpy.py', '--num', '10', '--XX', '-90'], stdout=subprocess.PIPE, text=True).stdout.split()[position_minus_90])
+    number_0 = int(subprocess.run(['python3', 'testpy.py', '--num', '0', '--XX', '7'], stdout=subprocess.PIPE, text=True).stdout.split()[position_0])
 
-    # Sum up the last numbers and print the total result
-    total_result = sum(last_numbers)
+    # รวมตัวเลขที่ระบุและพิมพ์ผลรวมทั้งหมด
+    total_result = number_90 + number_minus_90 + number_0
     print(f"The total result is: {total_result}")
+
 
 
 

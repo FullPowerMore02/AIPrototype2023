@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response
 
 import json
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 @app.route("/")
 def helloword():

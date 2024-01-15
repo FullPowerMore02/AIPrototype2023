@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response
 
 import json
 
-app = Flask(__name__)
+app = Flask(__name__) :
 # @ อ่านว่า รูท
 @app.route("/")
 def helloworld():

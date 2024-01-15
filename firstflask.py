@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, make_response
 
 import json
 
-app = Flask(__name__)
+app = Flask(_name_)
 
 @app.route("/")
 def helloword():
@@ -19,4 +19,4 @@ def home2():
 
 
 if _name_ =="_main_":
-    app.run(host='0.0.0.0',debug=True,port=5001)#host='0.0.0.0", port=500 0.0.0.0
+    app.run(host='0.0.0.0',debug=True,port=5001)#host='0.0.0.0", port=500

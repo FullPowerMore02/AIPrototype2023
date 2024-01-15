@@ -2,12 +2,21 @@ from flask import Flask, request, render_template, make_response
 
 import json
 
-app = Flask(__name__) :
-# @ อ่านว่า รูท
-@app.route("/")
-def helloworld():
-    return "Hello, World"
+app = Flask(_name_)
 
-if __name__ == "__main__"
-### 0.0.0.0 ให้เครื่องอื่นเห็นได้
-    app.run(host='0.0.0.0',debug=True,post=5001)####
+@app.route("/")
+def helloword():
+    return "Hello, World!"
+
+@app.route("/name")
+def hellobank():
+    return "Hello, Bank!"
+
+@app.route("/home2")
+def home2():
+    return render_template("home.html", name="Bank")
+
+
+
+if _name_ =="_main_":
+    app.run(host='0.0.0.0',debug=True,port=5001)#host='0.0.0.0", port=500 0.0.0.0

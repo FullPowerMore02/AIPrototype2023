@@ -11,10 +11,11 @@ def helloword():
 @app.route("/home", methods=['POST','GET'])
 def homefn():
     print ("Hello, Poro!")
+
     namein = request.form.get('fname')
     lastnamein = request.form.get('lname')
-    print(namein)
-    print(lastnamein,file=sys.stdout)
+    print(namein, file=sys.stdout)
+    print(lastnamein, file=sys.stdout)
     return render_template("home.html", name=namein)
 
 

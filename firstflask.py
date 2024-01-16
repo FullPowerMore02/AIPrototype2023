@@ -11,18 +11,19 @@ def helloword():
 @app.route("/home", methods=['POST','GET'])
 def homefn():
     if request.method == "GET":
-        print("Hello, Poro!")
-        namein = request.args.get('fname')
-        print(namein,file=sys.stdout)
-        return render_template("home.html",name,namein)
-        
+       print('we are in home(GET)', file=sys.stdout)
+       name = request.args.get('fname')
+       print(name, file=sys.stdout)
+       return render_template("home.html",name=name)
+        #getting input with name = fname in HTML form
     elif request.method == "POST":
-        print('we are in home(POST)',file=sys.stdout)
-        namein = request.form.get('fname', '')  # เพิ่ม default value เป็น ''
-        lastnamein = request.form.get('lname', '')
-        print(namein, file=sys.stdout)
-        print(lastnamein, file=sys.stdout)
-        return render_template("home.html", name=namein)
+       print('we are in home(POST)', file=sys.stdout)
+       namein = request.form.get('fname')
+       lastnamein = request.form.get('lname')
+       print(namein, file=sys.stdout)
+       print(lastnamein, file=sys.stdout)
+       return render_template("home.html",name=namein)
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5001)

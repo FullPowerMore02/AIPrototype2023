@@ -13,7 +13,7 @@ def homefn():
     if request.method == "GET":
         print("Hello, Poro!")
         namein = request.args.get('fname')
-        print(ืnamein,file=sys.stdout)
+        print(namein,file=sys.stdout)
         return render_template("home.html",name,namein)
         
     elif request.method == "POST"

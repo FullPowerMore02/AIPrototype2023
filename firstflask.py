@@ -7,7 +7,7 @@ app = Flask(__name__)
 ##API
 @app.route("/request",methods=['POST'])
 def web_service_API ():
-    payload = request.data.decode("url-8")
+    payload = request.data.decode("utf-8")
     inmessage = json.loads(payload)
     print(inmessage)
 

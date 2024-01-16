@@ -24,6 +24,24 @@ def homefn():
        print(lastnamein, file=sys.stdout)
        return render_template("home.html",name=namein)
 
+####
+
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        file.save('filename')
+        return redirect(url_for('homefn',name='upload completed'))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5001)

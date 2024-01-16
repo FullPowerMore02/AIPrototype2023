@@ -4,17 +4,18 @@ import json
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/name")
 def helloword():
     return "Hello, World!"
 
-@app.route("/name")
-def hellobank():
-    return "Hello, Bank!"
-
-@app.route("/home2")
-def home2():
-    return render_template("home.html", name="Bank")
+@app.route("/home", methods=['POST'])
+def homefn():
+    print ("Hello, Poro!")
+    namein = request.form.get('fname')
+    agein = request.form.get('lname')
+    print(namein)
+    print(agein)
+    return render_template("home.html", name=namein)
 
 
 

@@ -26,12 +26,15 @@ def homefn():
 
 ####
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        file.save('filename')
-        return redirect(url_for('homefn',name='upload completed'))
+        file.save('file')
+        return render_template("home.html",name='upload completed')
+    
     return '''
     <!doctype html>
     <title>Upload new File</title>

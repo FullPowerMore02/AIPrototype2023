@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, make_response
-
+import sys
 import json
 
 app = Flask(__name__)
@@ -8,13 +8,13 @@ app = Flask(__name__)
 def helloword():
     return "Hello, World!"
 
-@app.route("/home", methods=['POST'])
+@app.route("/home", methods=['POST','GET'])
 def homefn():
     print ("Hello, Poro!")
     namein = request.form.get('fname')
-    agein = request.form.get('lname')
+    lastnamein = request.form.get('lname')
     print(namein)
-    print(agein)
+    print(lastnamein,file=sys.stdout)
     return render_template("home.html", name=namein)
 
 

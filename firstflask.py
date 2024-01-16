@@ -10,15 +10,13 @@ def helloword():
 
 @app.route("/home", methods=['POST','GET'])
 def homefn():
-    print ("Hello, Poro!")
+    print("Hello, Poro!")
 
-    namein = request.form.get('fname')
-    lastnamein = request.form.get('lname')
+    namein = request.form.get('fname', '')  # เพิ่ม default value เป็น ''
+    lastnamein = request.form.get('lname', '')
     print(namein, file=sys.stdout)
     print(lastnamein, file=sys.stdout)
     return render_template("home.html", name=namein)
 
-
-
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',debug=True,port=5001)#host='0.0.0.0", port=500
+    app.run(host='0.0.0.0', debug=True, port=5001)

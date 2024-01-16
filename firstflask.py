@@ -16,7 +16,7 @@ def homefn():
         print(namein,file=sys.stdout)
         return render_template("home.html",name,namein)
         
-    elif request.method == "POST"
+    elif request.method == "POST":
         print('we are in home(POST)',file=sys.stdout)
         namein = request.form.get('fname', '')  # เพิ่ม default value เป็น ''
         lastnamein = request.form.get('lname', '')

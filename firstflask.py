@@ -25,7 +25,7 @@ def upload_file():
 
         return render_template("home.html", name='Submit completed', uploaded_file=file.filename)
 
-    return render_template("home.html")
+    return render_template("result.html")
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True, port=5001)

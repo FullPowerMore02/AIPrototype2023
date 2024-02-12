@@ -1,14 +1,74 @@
-<!-- templates/result.html -->
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prediction Result</title>
+    <title>FlaskBlog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(to bottom, #b3daff, #007bff);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+        }
+
+        .jumbotron {
+            background-color: rgba(0, 123, 255, 0.8);
+            color: white;
+            padding: 2rem;
+            border-radius: 0.3rem;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #28a745;
+        }
+
+        .uploaded-file {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
 </head>
-<body>
-    <h1>Prediction Result</h1>
-    <p>The predicted value is: {{ prediction }}</p>
+
+<body class="container mt-5">
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome!!! to FlaskBlog</h1>
+        {% if submitted_last_name %}
+        <p class="lead">Submitted Last Name: {{ submitted_last_name }}</p>
+        {% endif %}
+
+        <form action="{{ url_for('upload_file')}}" method="post" enctype="multipart/form-data" class="form">
+            <div class="form-group">
+                <label for="firstname">First Name:</label>
+                <input type="text" class="form-control" id="firstname" name="fname" placeholder="First Name">
+            </div>
+            <div class="form-group">
+                <label for="lastname">Last Name:</label>
+                <input type="text" class="form-control" id="lastname" name="lname" placeholder="Last Name">
+            </div>
+            <div class="form-group">
+                <label for="file">Choose a file:</label>
+                <input type="file" class="form-control-file" id="file" name="file"
+                    accept=".pdf, .doc, .docx, .txt, .png, .jpg, .jpeg, .gif, .mp4, .mp3, .zip, .rar, .csv, .xlsx, .pptx, .json, .xml">
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+
+        {% if uploaded_file %}
+        <p class="mt-3 uploaded-file">File uploaded successfully: {{ uploaded_file }}</p>
+        {% endif %}
+    </div>
 </body>
+
 </html>

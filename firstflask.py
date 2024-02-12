@@ -1,25 +1,36 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, render_template
+import sys
+import json
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('home.html')
+@app.route("/")
+def helloworld():
+    return "Hello, World!"
 
-@app.route('/upload', methods=['POST'])
-def upload():
-    if 'file' not in request.files:
-        return 'No file part'
-    
-    file = request.files['file']
-    
-    if file.filename == '':
-        return 'No selected file'
+@app.route("/home", methods=['POST', 'GET'])
+def homefn():
+    if request.method == "GET":
+        print('we are in home(GET)')
+        name = request.args.get('fname')
+        print(name)
+        return render_template("home.html", name=name)
+    elif request.method == "POST":
+        print('we are in home(POST)')
+        namein = request.form.get('fname')
+        lastnamein = request.form.get('lname')
+        print(namein)
+        print(lastnamein)
+        return render_template("home.html", name=namein)
 
-    # ทำอย่างอื่น ๆ ที่ต้องการกับไฟล์ที่อัพโหลด
-    # ตัวอย่าง: file.save('uploads/' + file.filename)
+@app.route('/upload', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        file = request.files['file']
+        file.save('uploaded_files/' + file.filename)  # Save to a folder named 'uploaded_files'
+        return render_template("home.html", name='Upload completed', uploaded_file=file.filename)
 
-    return 'File uploaded successfully'
+    return render_template("home.html")
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True, port=5001)

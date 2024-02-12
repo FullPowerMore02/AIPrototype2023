@@ -7,7 +7,7 @@ from tensorflow.keras.models import load_model
 import numpy as np
 
 # Load your LSTM model
-model = load_model('your_lstm_model.h5')  # แก้ตามชื่อโมเดลของคุณ
+model = load_model('your_lstm_model.py')  # แก้ตามชื่อโมเดลของคุณ
 scaler = MinMaxScaler()  # แก้ตามต้องการ
 
 # ... (โค้ดอื่น ๆ ที่คุณใช้เพื่อเตรียมข้อมูล)

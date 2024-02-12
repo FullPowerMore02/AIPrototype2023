@@ -1,60 +1,25 @@
-from flask import Flask, request, render_template, make_response
-import sys
-import json
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-##API
-@app.route("/request",methods=['POST'])
-def web_service_API ():
-    payload = request.data.decode("utf-8")
-    inmessage = json.loads(payload)
-    print(inmessage)
+@app.route('/')
+def index():
+    return render_template('home.html')
 
-    json_data = json.dumps({'y':'received!'})
-    return json_data
+@app.route('/upload', methods=['POST'])
+def upload():
+    if 'file' not in request.files:
+        return 'No file part'
     
-@app.route("/")
-def helloworld():
-    return "Hello, World!"
-
-@app.route("/home", methods=['POST','GET'])
-def homefn():
-    if request.method == "GET":
-       print('we are in home(GET)', file=sys.stdout)
-       name = request.args.get('fname')
-       print(name, file=sys.stdout)
-       return render_template("home.html",name=name)
-        #getting input with name = fname in HTML form
-    elif request.method == "POST":
-       print('we are in home(POST)', file=sys.stdout)
-       namein = request.form.get('fname')
-       lastnamein = request.form.get('lname')
-       print(namein, file=sys.stdout)
-       print(lastnamein, file=sys.stdout)
-       return render_template("home.html",name=namein)
-
-####
-
-
-
-@app.route('/', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        file.save('file')
-        return render_template("home.html",name='upload completed')
+    file = request.files['file']
     
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    if file.filename == '':
+        return 'No selected file'
 
+    # ทำอย่างอื่น ๆ ที่ต้องการกับไฟล์ที่อัพโหลด
+    # ตัวอย่าง: file.save('uploads/' + file.filename)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=5001)
+    return 'File uploaded successfully'
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -7,31 +7,23 @@ app = Flask(__name__)
 def helloworld():
     return "Hello, World!"
 
-@app.route("/home", methods=['POST', 'GET'])
-def homefn():
-    if request.method == "GET":
-        print('we are in home(GET)')
-        name = request.args.get('fname')
-        print(name)
-        return render_template("home.html", name=name)
-    elif request.method == "POST":
-        print('we are in home(POST)')
-        namein = request.form.get('fname')
-        lastnamein = request.form.get('lname')
-        print(namein)
-        print(lastnamein)
-        return render_template("home.html", name=namein)
-
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route("/upload", methods=['POST', 'GET'])
 def upload_file():
     if request.method == 'POST':
         # Ensure the 'uploaded_files' folder exists
         if not os.path.exists('uploaded_files'):
             os.makedirs('uploaded_files')
 
+        namein = request.form.get('fname')
+        lastnamein = request.form.get('lname')
+
+        # Do something with the name, lastname, and file
+        # (e.g., save the file, process the data, etc.)
+
         file = request.files['file']
         file.save(os.path.join('uploaded_files', file.filename))
-        return render_template("home.html", name='Upload completed', uploaded_file=file.filename)
+
+        return render_template("home.html", name='Submit completed', uploaded_file=file.filename)
 
     return render_template("home.html")
 

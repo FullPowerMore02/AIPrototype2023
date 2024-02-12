@@ -23,7 +23,7 @@ def upload_file():
         file = request.files['file']
         file.save(os.path.join('uploaded_files', file.filename))
 
-        return render_template("home.html", name='Submit completed', uploaded_file=file.filename)
+        return render_template("result.html", name='Submit completed', uploaded_file=file.filename)
 
     return render_template("result.html")
 

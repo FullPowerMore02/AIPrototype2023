@@ -25,8 +25,12 @@ def homefn():
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
+        # Ensure the 'uploaded_files' folder exists
+        if not os.path.exists('uploaded_files'):
+            os.makedirs('uploaded_files')
+
         file = request.files['file']
-        file.save(os.path.join('uploaded_files', file.filename))  # Save to a folder named 'uploaded_files'
+        file.save(os.path.join('uploaded_files', file.filename))
         return render_template("home.html", name='Upload completed', uploaded_file=file.filename)
 
     return render_template("home.html")

@@ -1,6 +1,5 @@
 from flask import Flask, request, render_template
-import sys
-import json
+import os
 
 app = Flask(__name__)
 
@@ -27,7 +26,7 @@ def homefn():
 def upload_file():
     if request.method == 'POST':
         file = request.files['file']
-        file.save('uploaded_files/' + file.filename)  # Save to a folder named 'uploaded_files'
+        file.save(os.path.join('uploaded_files', file.filename))  # Save to a folder named 'uploaded_files'
         return render_template("home.html", name='Upload completed', uploaded_file=file.filename)
 
     return render_template("home.html")

@@ -7,6 +7,10 @@ app = Flask(__name__)
 def helloworld():
     return "Hello, World!"
 
+@app.route("/home")
+def home():
+    return render_template("home.html")
+
 @app.route("/upload", methods=['POST', 'GET'])
 def upload_file():
     if request.method == 'POST':

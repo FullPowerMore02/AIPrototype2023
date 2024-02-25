@@ -1,79 +1,66 @@
-def predictionModel(n_days, stock_code):
-    '''
-    This function will get called by callbacks.
-    It will create ML model to predict stock price based on provided number of days and stock ticker
-    '''
+# model.py
+import tensorflow as tf
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense
+from keras.callbacks import EarlyStopping
+from sklearn.model_selection import TimeSeriesSplit
+import yfinance as yf
 
-    # importing libraries 
-    import yfinance as yf
-    import plotly.graph_objects as go
-    from sklearn.model_selection import train_test_split, GridSearchCV
-    from sklearn.svm import SVR
-    from datetime import date, timedelta
+tf.compat.v1.disable_v2_behavior()
 
-    df = yf.download(stock_code, period='60d') # downloading data for 60days
-    df.reset_index(inplace=True)
-    df['Days'] = df.index # adding new column in dataset
+def build_single_lstm_model(input_shape):
+    model = Sequential()
+    model.add(LSTM(256, return_sequences=False, input_shape=input_shape))
+    model.add(Dense(1))
+    model.compile(optimizer='Adam', loss='mean_squared_error')
+    return model
 
-    days = []
-    for i in range(len(df['Days'])):
-        days.append([i])
+def train_lstm_model(X_train, y_train, X_test, y_test):
+    input_shape = (X_train.shape[1], X_train.shape[2])
+    single_lstm_model = build_single_lstm_model(input_shape)
     
-    # Splitting the dataset
-    X = days
-    y = df.Close
+    early_stopping = EarlyStopping(monitor='val_loss', patience=100, mode='min')
+    
+    single_history = single_lstm_model.fit(X_train, y_train, epochs=50, batch_size=64,
+                                           validation_data=(X_test, y_test), callbacks=[early_stopping])
+    
+    single_lstm_model.save("lstm_model")
+    
+    return single_lstm_model
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, shuffle=False)
+def load_lstm_model():
+    loaded_model = tf.keras.models.load_model("lstm_model")
+    return loaded_model
 
-    # We are going to use GridSearchCV method
-    # for getting best parameters for our model
-    # first we will provide some parameters as Dict here
-    paramters = {
-        'C':[0.001,0.01,0.1,1,100,1000],
-        'epsilon': [
-                    0.0001, 0.0005, 0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1, 5, 10,
-                    50, 100, 150, 1000
-                ],
-        'gamma': [0.0001, 0.001, 0.005, 0.1, 1, 3, 5, 8, 40, 100, 1000]
-    }
+def preprocess_data(df):
+    scaler = MinMaxScaler()
+    scale_cols = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume',
+                  'Pct_change', 'Log Returns', 'Volatility', 'Next_day']
+    scaled_df = scaler.fit_transform(df[scale_cols])
+    scaled_df = pd.DataFrame(scaled_df, columns=scale_cols)
+    return scaled_df
 
-    # we will use Support Vector Regressor and kernel as Radial Basis Function
-    gsc = GridSearchCV(
-        estimator=SVR(kernel='rbf'),
-        param_grid=paramters,
-        cv=10,
-        scoring='neg_mean_absolute_error'
-    )
+def prepare_data(df, lookback):
+    data_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume',
+                    'Pct_change', 'Log Returns', 'Volatility']
+    target_columns = ['Next_day']
+    
+    X = []
+    y = []
 
-    grid_result = gsc.fit(X_train,y_train)
+    for i in range(len(df) - lookback):
+        X.append(df.loc[i:i+lookback-1, data_columns].values)
+        y.append(df.loc[i+lookback, target_columns].values[0])
 
-    # storing and using best parameters
-    # best parameters = min error
-    best_param = grid_result.best_params_
-    svr_model = SVR(kernel='rbf', C=best_param['C'], epsilon=best_param['epsilon'], gamma=best_param['gamma'])
-    svr_model.fit(X_train, y_train)
-
-    output_days = []
-    for i in range(1,n_days+1): # adding n days provided by user to our 60 day
-        output_days.append([i+X_test[-1][0]]) # 60 + n
-
-    dates = []
-    current = date.today()
-    for i in range(n_days): # creating timeline for future dates
-        current += timedelta(days=1)
-        dates.append(current)
-
-    fig = go.Figure()
-    fig.add_trace(
-        go.Scatter(
-                x=dates, 
-                y=svr_model.predict(output_days),
-                mode='lines+markers',
-                name='data'))
-    fig.update_layout(
-        title="Predicted Close Price of next " + str(n_days - 1) + " days",
-        xaxis_title="Date",
-        yaxis_title="Closed Price"
-    )
-
-    return fig
+    X = np.array(X)
+    y = np.array(y)
+    
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(X.reshape(X.shape[0], -1))
+    
+    y_scaler = MinMaxScaler()
+    y = y_scaler.fit_transform(y.reshape(-1, 1))
+    
+    return X, y

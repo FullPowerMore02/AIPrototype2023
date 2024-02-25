@@ -74,5 +74,6 @@ def index():
     plot_data = generate_plot()
     return render_template('index.html', plot_data=plot_data)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True, port=5001)
+

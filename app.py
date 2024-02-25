@@ -1,5 +1,6 @@
 # app.py
 from flask import Flask, render_template
+import yfinance as yf
 from model import load_lstm_model, preprocess_data, prepare_data
 import pandas as pd
 import numpy as np

@@ -1,193 +1,78 @@
-#first import all of this lib
-import dash
-from dash import dcc
-from dash import html
-from datetime import date, datetime as dt
-from dash.dependencies import Input, Output, State
-from dash.exceptions import PreventUpdate
-#from matplotlib.pyplot import title
-import yfinance as yf
+# app.py
+from flask import Flask, render_template
+from model import load_lstm_model, preprocess_data, prepare_data
 import pandas as pd
-#import plotly.graph_objs
-#import plotly.graph_objects as go
-import plotly.express as px
-#import pandas_datareader.data as web
-from model import predictionModel
+import numpy as np
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.preprocessing import MinMaxScaler
 
-app = dash.Dash(__name__)
-server = app.server
+app = Flask(__name__)
 
+def generate_plot():
+    df = yf.download('^GSPC', start='2012-01-01', end='2022-12-31')
+    df['Pct_change'] = df['Close'].pct_change()
+    df['Pct_change'] = np.log1p(df['Pct_change'])
+    df['Log Returns'] = np.log(df['Close'] / df['Close'].shift(1))
+    df['Volatility'] = df['Log Returns'].rolling(window=20).std() * np.sqrt(252)
+    df['Next_day'] = df['Close'].shift(-1)
+    df = df.dropna()
 
-app.layout = html.Div(
-    [  
-        html.Div(
-            [
-                html.H2("Welcome to the Stock Trend Prediction App!", className="heading"),
-                html.Div(
-                    [
-                    # Input box for to enter stock ticker, default value will be 'SBIN.NS'
-                    dcc.Input(id='stock_code', value= '',placeholder= 'Input Stock Ticker here', type= 'text', className='inputs'),
-                    html.Button('Submit', id='submit-stock', className='buttons', n_clicks=0)
+    scaled_df = preprocess_data(df)
 
-                    ],className=''
-                ),
+    lookback = 10
+    X, y = prepare_data(scaled_df, lookback)
 
-                html.Div(
-                    [
-                        #Date range input, if nothing given default will be 1st jan 2020 to today
-                        dcc.DatePickerRange(
-                            id = 'date-range',
-                            min_date_allowed=dt(1995,8,5),
-                            max_date_allowed=dt.today(),
-                            initial_visible_month=dt.now(),
-                            # end_date = dt.now(),
-                            start_date = date(2020,1,1),
-                            className='inputs'
-                        )
-                    ],className=''
+    # Split data into train and test sets
+    tscv = TimeSeriesSplit(gap=0, max_train_size=None, n_splits=20, test_size=64)
+    train_index, test_index = next(tscv.split(X, y))
+    X_train, X_test = X[train_index], X[test_index]
+    y_train, y_test = y[train_index], y[test_index]
 
-                ),
+    X_train = X_train.reshape((X_train.shape[0], lookback, -1))
+    X_test = X_test.reshape((X_test.shape[0], lookback, -1))
 
-                html.Div(
-                    [
-                        #two buttons below
-                        html.Button('Stock Price', id='stock_price', className='buttons'),
-                        html.Button('Indicators', id='indicators', n_clicks=0, className='buttons'),
-                        
-                    ],className=''
-                ),
-                html.Div(
-                    [
-                        # Input box to enter number of days to forecast future price and button to initiate task
-                        dcc.Input(id='n_days',value = '', type='text', placeholder='Number of Days for forecast', className='inputs'),
-                        html.Button('Forecast', id='Forecast', className='buttons', n_clicks=0)
-                    ],className=''
-                )
-            
-            ],className='nav'
-        ),
+    loaded_model = load_lstm_model()
 
-        # 2nd part, this should be on right side of screen, will display graph
+    df_reset = df.reset_index()
+    date_values_bi = df_reset['Date'].iloc[test_index].values
+    date_values_bi = date_values_bi.astype('str')
 
-        html.Div(
-            [
-            dcc.Loading( id='loading1', color='#3b3b3b',children=[html.Div(
-                [
-                    html.Img(id='logo', className='imglogo'),
-                    html.H2(id='ticker')
-                ],className='header'
-            ),
-            html.Div(id='description', className='info')], type='circle'),
-            dcc.Loading(children=[html.Div([], id='stonks-graph', className='graphs')], id='loading2', type='graph'),
-            dcc.Loading(id='loading3',
-                children=[html.Div([], id='forecast-graph', className='graphs')],
-                type='graph')
+    # Assume you have some testing data
+    new_data_point = X_test[-1] + 0.002
+    X_test_appended = np.append(X_test, [new_data_point], axis=0)
+    predictions = loaded_model.predict(X_test_appended)
 
+    y_scaler = MinMaxScaler()
+    y_single_pred_original = y_scaler.inverse_transform(predictions)
+    y_single_test_original = y_scaler.inverse_transform(y_test)
 
-            ],className='outputContainer'
-        )
-    ], className='container')
+    plt.figure(figsize=(12, 6))
+    plt.title('Single-Layered-LSTM, window_size=10')
+    plt.ylabel('close price')
+    plt.xlabel('period')
+    plt.plot(y_single_test_original, label='actual')
+    plt.plot(y_single_pred_original, label='prediction')
+    plt.axvline(64, color='red')
+    plt.grid()
+    plt.legend(loc='best')
 
+    # Save the plot to BytesIO
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
 
-#callback for updating logo and stock description
-@app.callback([
-    Output('logo', 'src'),
-    Output('ticker', 'children'),
-    Output('description', 'children')],
-    [Input('submit-stock', 'n_clicks')],
-    [State('stock_code', 'value')]
-)
+    # Encode the image as base64
+    plot_data = base64.b64encode(buf.read()).decode('utf-8')
 
-def update_data(n, stock_code):
-    #if user provided nothing, then default output will following
-    desc = """
-    Hey! Enter stock Ticker to get information
+    return render_template('index.html', plot_data=plot_data)
 
-        1. Enter Stock ticker at input(AAPL for Apple.inc)
-        2. Hit Submit button and wait
-        3. Click Stock price button and Indicator button to get trend of stock price
-        4. Enter number of days between 1-15 to forecast the trend and hit forecast button
-        5. wait.....and Hurreeyy !! you got it."""
-    if n==0 or stock_code=='' :
-        return 'https://www.linkpicture.com/q/stonks.jpg','',desc
-    else:
-        tk = yf.Ticker(stock_code)
-        sinfo = tk.info
-        #df = pd.DataFrame(sinfo)
-        return sinfo['logo_url'], sinfo['shortName'], sinfo['longBusinessSummary']
+@app.route('/')
+def index():
+    plot_data = generate_plot()
+    return render_template('index.html', plot_data=plot_data)
 
-
-    
-    
-#callback for updating graph for selected time range
-@app.callback(
-    Output(component_id='stonks-graph', component_property='children'),
-    [Input(component_id='stock_price', component_property='n_clicks'),
-    Input('indicators', 'n_clicks'),
-    Input('date-range','start_date'),
-    Input('date-range','end_date')],
-    [State(component_id='stock_code', component_property='value')]
-)
-def update_mygraph(n, ind, start, end,stock_code):
-    if n==0:
-        return ''
-
-    elif stock_code=='':
-        raise PreventUpdate
-
-    else:
-        #if start is not selected, we will assume it as 1st Jan 2020
-        if start is None:
-            start = date(2020, 1, 1)
-        #if end date is not selected, set end date as current day
-        if end is None:
-            end = dt.today()
-
-        #stock code will match on yahoo finance and data will fetch to generate graph
-        df = pd.DataFrame(yf.download(stock_code,start=start, end=end))
-        df.reset_index(inplace=True)
-        df['Date']=pd.to_datetime(df['Date'])
-        df['ema20'] = df['Close'].rolling(20).mean()
-        fig = px.line(
-             df,
-             x='Date',
-             y=['Close'],
-             title='Stock Trend'
-         )
-        fig.update_traces(line_color='#ef3d3d')
-        #go.Figure(data=[
-        #         go.Candlestick(
-        #             x=df['Date'],
-        #             open=df['Open'], high=df['High'],
-        #             low=df['Low'], close=df['Close']
-        #         ),
-                #go.Scatter()
-        #    ])
-        
-        if ind in [1,3,5,7,9,11,13,15,17]:
-            fig.add_scatter(x=df['Date'], y=df['ema20'], line=dict(color= 'blue', width=1), name='EMA20')
-        fig.update_layout(
-            xaxis_rangeslider_visible=False,
-            xaxis_title="Date",
-            yaxis_title="Closed Price")
-        
-        return dcc.Graph(figure=fig)
-
-@app.callback(
-    Output(component_id='forecast-graph', component_property='children'), 
-    [Input(component_id='Forecast', component_property='n_clicks'),
-    Input(component_id='n_days', component_property='value')],
-    [State(component_id='stock_code', component_property='value')]
-)
-def forecast(n, n_days, stock_code):
-    if n == None:
-        return ['']
-    if stock_code == '':
-        raise PreventUpdate
-    fig = predictionModel(int(n_days)+1, stock_code)
-    return dcc.Graph(figure=fig)
-    
-
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=5001)
+if __name__ == '__main__':
+    app.run(debug=True)

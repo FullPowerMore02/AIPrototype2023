@@ -16,7 +16,7 @@ df['Log Returns'] = np.log(df['Close'] / df['Close'].shift(1))
 df['Volatility'] = df['Log Returns'].rolling(window=20).std() * np.sqrt(252)
 df['Next_day'] = df['Close'].shift(-1)
 df.fillna(0, inplace=True)
-model = tf.keras.models.load_model('/content/lstm_model.h5')
+model = tf.keras.models.load_model('lstm_model.h5')
 lookback = 10
 data_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume','Pct_change', 'Log Returns', 'Volatility']
 target_columns = ['Next_day']

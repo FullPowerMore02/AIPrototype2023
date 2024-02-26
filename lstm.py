@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,7 +8,6 @@ from sklearn.model_selection import train_test_split, TimeSeriesSplit
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
 tf.compat.v1.disable_v2_behavior()
-%matplotlib inline
 
 df = yf.download('ETH-USD')
 df['Pct_change'] = np.log1p(df['Close'].pct_change())

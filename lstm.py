@@ -93,4 +93,6 @@ def get_ip():
     return ip_address
 
 print(get_ip())
-! streamlit run app.py & npx localtunnel --port 8501
+import subprocess
+
+subprocess.Popen("streamlit run app.py & npx localtunnel --port 8501", shell=True)

@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import yfinance as yf
+import requests
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -77,5 +78,19 @@ plt.legend(loc='best')
 plt.xticks(np.arange(0, len(date_values_bi_pred), step=5), date_values_bi_pred[::5], rotation=45)
 plt.show()
 
-! wget -q -O - ipv4.icanhazip.com
+import socket
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.0.0.0', 1))
+        ip_address = s.getsockname()[0]
+    except Exception:
+        ip_address = '127.0.0.1'
+    finally:
+        s.close()
+    return ip_address
+
+print(get_ip())
 ! streamlit run app.py & npx localtunnel --port 8501

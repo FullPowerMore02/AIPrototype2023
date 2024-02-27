@@ -3,33 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Prediction</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Flask App</title>
 </head>
 <body>
-    <div class="container mt-4">
-        <h2>Stock Prediction</h2>
-        <form method="post" action="/predict">
-            <div class="form-group">
-                <label for="start_date">Start Date:</label>
-                <input type="date" class="form-control" id="start_date" name="start_date" required>
-            </div>
-            <div class="form-group">
-                <label for="end_date">End Date:</label>
-                <input type="date" class="form-control" id="end_date" name="end_date" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Predict</button>
-        </form>
-
-        {% if table %}
-        <div class="mt-4">
-            {{ table|safe }}
-        </div>
-        {% endif %}
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <h1>Ethereum Data</h1>
+    <p>Data has been saved to ethereum_data.csv.</p>
+    <a href="{{ url_for('download') }}">Download CSV</a>
 </body>
 </html>

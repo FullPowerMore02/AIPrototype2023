@@ -2,8 +2,7 @@
 https://github.com/FullPowerMore02/FullPowerMore02.github.io
 https://fullpowermore02.github.io/
 
-- 1
-AI Prototype Class1
+- 1 AI Prototype Class 1
 Cloud Computing คืออะไร
 ทุกอย่างเป็นระบบคลาวด์ที่เราสามารถใช้ได้หากเราเข้าสู่ระบบอินเทอร์เน็ต
 

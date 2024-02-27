@@ -5,6 +5,7 @@ https://fullpowermore02.github.io/
 
 Webapp
 
+https://github.com/FullPowerMore02/AIPrototype2023/blob/main/lstm.py
 
 AI Prototype Class1
 

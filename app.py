@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 import tensorflow as tf
+from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 
@@ -65,4 +66,4 @@ def predict():
     return render_template('index.html', table=table_html)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True, port=5001)

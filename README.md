@@ -7,6 +7,15 @@ Webapp
 
 https://github.com/FullPowerMore02/AIPrototype2023/blob/main/lstm.py
 
+subprocess
+
+https://github.com/FullPowerMore02/AIPrototype2023/blob/main/python_subprocess.py
+
+Flask สำหรับ webapp
+
+https://github.com/FullPowerMore02/AIPrototype2023/blob/main/firstflask.py
+
+
 AI Prototype Class1
 
 Cloud Computing คืออะไร

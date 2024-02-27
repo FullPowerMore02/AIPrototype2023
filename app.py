@@ -1,52 +1,68 @@
-import streamlit as st
+from flask import Flask, render_template, request
+import numpy as np
+import pandas as pd
 import yfinance as yf
-import datetime
-import plotly.graph_objs as go
-import requests
-import json
+import tensorflow as tf
 
-API_URL = "http://127.0.0.1:8000/LSTM_Predict"
+app = Flask(__name__)
 
-min_date = datetime.date(2020, 1, 1)
-max_date = datetime.date(2022, 12, 31)
+# Load the pre-trained model
+model = tf.keras.models.load_model('/content/lstm_model.h5')
 
-stock_name = st.selectbox('Please choose stock name', ('AAPL','TSLA','AMZN','MSFT'))
+# Function to preprocess data for prediction
+def preprocess_data(df):
+    df['Pct_change'] = np.log1p(df['Close'].pct_change())
+    df['Log Returns'] = np.log(df['Close'] / df['Close'].shift(1))
+    df['Volatility'] = df['Log Returns'].rolling(window=20).std() * np.sqrt(252)
+    df['Next_day'] = df['Close'].shift(-1)
+    df.fillna(0, inplace=True)
+    return df
 
-start_date = st.date_input("Start date", min_value=min_date, max_value=max_date, value=min_date)
-end_date = st.date_input("End date", min_value=min_date, max_value=max_date, value=max_date)
+# Function to get predictions
+def get_predictions(data):
+    lookback = 10
+    data_columns = ['Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume', 'Pct_change', 'Log Returns', 'Volatility']
 
-if start_date <= end_date:
-    st.success("Start date: `{}`\n\nEnd date:`{}`".format(start_date, end_date))
-else:
-    st.error("Error: End date must be after start date.")
+    X = []
+    for i in range(len(data) - lookback):
+        X.append(data.loc[i:i + lookback - 1, data_columns].values)
 
-stock_data = yf.download(stock_name, start=start_date, end=end_date)
-stock_data.reset_index(inplace=True)
+    X = np.array(X)
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(X.reshape(X.shape[0], -1))
+    X = X.reshape((X.shape[0], lookback, -1))
 
-fig = go.Figure()
-fig.add_trace(go.Scatter(x=stock_data.index, y=stock_data['Close'], name='Close'))
-fig.update_layout(title=f"{stock_name} Stock Price")
-st.plotly_chart(fig)
+    predictions = model.predict(X)
+    return predictions
 
-stock_data.to_csv(f'{stock_name}_data.csv',index=False)
+# Route for the home page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
+# Route to handle the form submission
+@app.route('/predict', methods=['POST'])
+def predict():
+    # Get input data from the form
+    start_date = request.form['start_date']
+    end_date = request.form['end_date']
 
-if st.button("Predict"):
-    payload = {"stock_name": stock_name}
+    # Download historical data within the specified date range
+    df = yf.download('ETH-USD', start=start_date, end=end_date)
 
-    try:
-        response = requests.post(API_URL, json=payload)
-        response.raise_for_status()
+    # Preprocess the data
+    df_processed = preprocess_data(df)
 
-        predictions = response.json()
-        predicted_prices = predictions["prediction"]
+    # Get predictions
+    predictions = get_predictions(df_processed)
 
-        actual_prices = stock_data['Close'].tolist()
-        fig = go.Figure()
-        fig.add_trace(go.Scatter(x=stock_data.index, y=actual_prices, name='Actual'))
-        fig.add_trace(go.Scatter(x=stock_data.index[-len(predicted_prices):], y=predicted_prices, name='Predicted'))
-        fig.update_layout(title=f"{stock_name} Stock Price")
-        st.plotly_chart(fig)
+    # Combine the predictions with the original data
+    df_processed['Predicted_Next_day'] = np.concatenate(([np.nan] * (lookback - 1), predictions.flatten()))
 
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error occurred while making the request: {e}")
+    # Convert the DataFrame to HTML and pass it to the template
+    table_html = df_processed.to_html(classes='table table-bordered table-hover', index=False)
+
+    return render_template('index.html', table=table_html)
+
+if __name__ == '__main__':
+    app.run(debug=True)

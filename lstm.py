@@ -4,6 +4,7 @@ import numpy as np
 import tensorflow as tf
 from sklearn.preprocessing import MinMaxScaler
 from datetime import datetime, timedelta
+from sklearn.model_selection import TimeSeriesSplit
 
 app = Flask(__name__)
 
@@ -81,18 +82,7 @@ X_test = X_test.reshape((X_test.shape[0], lookback, -1))
 new_data_point = [X_test[-1] + 0.002, X_test[-1] + 0.00145, X_test[-1] + 0.006475, X_test[-1] + 0.00893]
 X_test_appended = np.append(X_test, new_data_point, axis=0)
 
-# กำหนดรูปแบบของวันที่
-df_reset = df.reset_index()
-date_values_bi = df_reset['Date'].iloc[test_index].values
-date_values_bi = [date[:10] for date in date_values_bi.astype('str')]
-date_values_bi = np.array(date_values_bi)
-start_date = datetime.strptime(date_values_bi[-1], '%Y-%m-%d')
-date_values_list_pred = [start_date + timedelta(days=i) for i in range(1, 5)]
-date_values_list_pred = [date.strftime('%Y-%m-%d') for date in date_values_list_pred]
-date_values_bi_pred = np.append(date_values_bi, date_values_list_pred)
-
-# เทรนโมเดล
-# ...
+# ... (เพิ่มโค้ดเพื่อทำการเทรนโมเดล)
 
 # เส้นทางสำหรับการแสดงผลการทำนายราคาหุ้น
 @app.route('/')

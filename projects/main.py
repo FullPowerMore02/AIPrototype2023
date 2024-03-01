@@ -44,7 +44,7 @@ def add_header(response):
 
 @app.route('/')
 def index():
-   return render_template('index.html')
+   return render_template('projects/index.html')
 
 @app.route('/insertintotable',methods = ['POST'])
 def insertintotable():

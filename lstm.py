@@ -11,15 +11,8 @@ app = Flask(__name__)
 # โหลดโมเดลที่ถูกฝึกสอนไว้
 model = tf.keras.models.load_model('lstm_model.h5')
 
-# ฟังก์ชันสำหรับการทำนาย
-def make_predictions(X_test, X_test_appended):
-    s_pred = model.predict(X_test)
-    s_plus_pred = model.predict(X_test_appended)
-
-    y_s_pred = y_scaler.inverse_transform(s_pred)
-    y_s_plus_pred = y_scaler.inverse_transform(s_plus_pred)
-
-    return y_s_pred, y_s_plus_pred
+# กำหนดตัวแปร date_values_bi ให้เป็น global
+date_values_bi = None
 
 # โค้ดเตรียมข้อมูลของคุณ
 df = yf.download('ETH-USD')
@@ -54,7 +47,6 @@ X = []
 y = []
 
 # สร้างข้อมูลสำหรับการทำนาย
-# สร้างข้อมูลสำหรับการทำนาย
 for i in range(len(df_selected) - lookback):
     X.append(df_selected.iloc[i:i+lookback, df_selected.columns.isin(data_columns)].values)
     y.append(df_selected.iloc[i+lookback, df_selected.columns.isin(target_columns)].values[0])
@@ -83,11 +75,11 @@ X_test = X_test.reshape((X_test.shape[0], lookback, -1))
 new_data_point = [X_test[-1] + 0.002, X_test[-1] + 0.00145, X_test[-1] + 0.006475, X_test[-1] + 0.00893]
 X_test_appended = np.append(X_test, new_data_point, axis=0)
 
-# ... (เพิ่มโค้ดเพื่อทำการเทรนโมเดล)
-
 # เส้นทางสำหรับการแสดงผลการทำนายราคาหุ้น
 @app.route('/')
 def stock_predictions():
+    global date_values_bi  # ประกาศให้ date_values_bi เป็น global
+
     # ทำนาย
     s_pred = model.predict(X_test)
     s_plus_pred = model.predict(X_test_appended)
@@ -95,6 +87,16 @@ def stock_predictions():
     y_s_pred = y_scaler.inverse_transform(s_pred)
     y_s_plus_pred = y_scaler.inverse_transform(s_plus_pred)
     y_y_test = y_scaler.inverse_transform(y_test)
+
+    # กำหนดรูปแบบของวันที่
+    df_reset = df.reset_index()
+    date_values_bi = df_reset['Date'].iloc[test_index].values
+    date_values_bi = [date[:10] for date in date_values_bi.astype('str')]
+    date_values_bi = np.array(date_values_bi)
+    start_date = datetime.strptime(date_values_bi[-1], '%Y-%m-%d')
+    date_values_list_pred = [start_date + timedelta(days=i) for i in range(1, 5)]
+    date_values_list_pred = [date.strftime('%Y-%m-%d') for date in date_values_list_pred]
+    date_values_bi_pred = np.append(date_values_bi, date_values_list_pred)
 
     # เตรียมข้อมูลสำหรับแสดงผล
     data = {

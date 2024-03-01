@@ -54,9 +54,10 @@ X = []
 y = []
 
 # สร้างข้อมูลสำหรับการทำนาย
+# สร้างข้อมูลสำหรับการทำนาย
 for i in range(len(df_selected) - lookback):
-    X.append(df_selected.loc[i:i+lookback-1, data_columns].values)
-    y.append(df_selected.loc[i+lookback, target_columns].values[0])
+    X.append(df_selected.iloc[i:i+lookback, df_selected.columns.isin(data_columns)].values)
+    y.append(df_selected.iloc[i+lookback, df_selected.columns.isin(target_columns)].values[0])
 
 X = np.array(X)
 y = np.array(y)

@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 
 # โหลดโมเดลที่ถูกฝึกสอนไว้
-model = tf.keras.models.load_model('/content/lstm_model.h5')
+model = tf.keras.models.load_model('lstm_model.h5')
 
 # ฟังก์ชันสำหรับการทำนาย
 def make_predictions(X_test, X_test_appended):

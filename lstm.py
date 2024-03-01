@@ -107,5 +107,5 @@ def stock_predictions():
 
     return render_template('stock_predictions.html', data=data)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True, port=5001)

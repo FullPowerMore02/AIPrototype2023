@@ -83,12 +83,13 @@ def insertintotable():
         df=df.set_index("Code")
         #for daily basis
         
+       
         def parser(x):
             try:
                 return datetime.strptime(str(x), '%Y-%m-%d')
             except Exception as e:
         # Handle the exception, you can print or log the error if needed
-            print(f"Error parsing date: {e}")
+                print(f"Error parsing date: {e}")
             return None
 
         def arima_model(train, test):

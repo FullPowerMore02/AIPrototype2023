@@ -78,7 +78,7 @@ def home():
 
 
 # rota para prever os valores futuros com base na quantidade de dias (num_dates)
-@app.route('/forecast/<int:num_dates>', methods=['GET'])
+@app.route('/forecast/3', methods=['GET'])
 def forecast(num_dates):
     try:
         # calcular os valores futuros (em USD $)

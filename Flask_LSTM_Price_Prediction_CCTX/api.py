@@ -8,6 +8,12 @@ from flask_cors import CORS
 import plotly.express as px
 import os
 import ccxt
+import tensorflow as tf
+
+physical_devices = tf.config.list_physical_devices('GPU')
+if physical_devices:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
+
 model_path = 'eth_lstm_model.h5'
 scaler_path = 'eth_scaler.pkl'
 

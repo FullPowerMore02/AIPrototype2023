@@ -13,7 +13,6 @@ The implementation works with real data, eliminating the need for CSV files or s
 - CSS
 
 ## Acknowledgements
-This implementation is based on the work available at [guilhermegobbo/GOOG-STOCK-PRED](https://github.com/guilhermegobbo/GOOG-STOCK-PRED/tree/main).
 
 ## How to Use
 ### Windows

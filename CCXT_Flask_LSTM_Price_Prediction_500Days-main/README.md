@@ -12,8 +12,6 @@ The implementation works with real data, eliminating the need for CSV files or s
 - HTML
 - CSS
 
-## Acknowledgements
-
 ## How to Use
 ### Windows
 1. Open your command prompt.

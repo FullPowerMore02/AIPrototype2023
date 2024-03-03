@@ -8,7 +8,7 @@ function BtnClick() { // quando apertado o botão será acionado essa função
         return;
     }
 
-    fetch(`http://127.0.0.1:5000/forecast/${num_dates}`) // faz uma solicitação GET na página
+    fetch(`http://20.198.93.92:5001/forecast/${num_dates}`) // faz uma solicitação GET na página
 
         .then(response => response.json()) // passa os dados da solicitação para JSON
         .then(data => { // pega os dados JSON e passa para a função 'data'

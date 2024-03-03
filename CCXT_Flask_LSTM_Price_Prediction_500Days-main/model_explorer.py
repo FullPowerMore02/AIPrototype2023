@@ -12,6 +12,11 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dropout, Dense
 from warnings import filterwarnings
 import ccxt 
+import tensorflow as tf
+
+physical_devices = tf.config.list_physical_devices('GPU')
+if physical_devices:
+    tf.config.experimental.set_memory_growth(physical_devices[0], True)
 
 ETH_data = ccxt.binance().fetch_ohlcv('ETH/USDT', timeframe='1d')
 df = pd.DataFrame(ETH_data, columns=['Date', 'Open', 'High', 'Low', 'Close', 'Volume'])

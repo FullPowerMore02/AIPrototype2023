@@ -1,4 +1,4 @@
-# CCXT_Flask_LSTM_Price_Prediction_500Days
+# ETH Flask LSTM Price Prediction
 http://20.198.93.92:5001/
 This repository contains an implementation of a ETH Price Prediction system using LSTM (Long Short-Term Memory) neural networks. The system utilizes the CCXT library for fetching historical stock price data, Flask for building a RESTful API, and TensorFlow for implementing the LSTM model. Additionally, it includes components written in JavaScript, HTML, and CSS for the frontend interface.
 

@@ -1,27 +1,27 @@
-function BtnClick() { 
-
-    const num_dates = 3 
-    fetch(`http://20.198.93.92:5001/forecast/${num_dates}`) 
-
-        .then(response => response.json()) 
-        .then(data => { 
-            console.log("Date received from server:", data);
+function BtnClick() {
+    const num_dates = 3;
+    fetch(`http://20.198.93.92:5001/forecast/${num_dates}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Data received from server:", data);
 
             let messages = [];
 
-            for (const date in data.num_dates) {
-                const message = `Data: ${date} --> Expected Value: $${data.num_dates[date]}`;
+            Object.entries(data.num_dates).forEach(([date, value]) => {
+                const message = `Data: ${date} --> Expected Value: $${value}`;
                 messages.push(message);
-            } 
+            });
 
-            const graphDiv = document.getElementById("graphDiv"); 
-            const graphData = JSON.parse(data.graph); // 
-            Plotly.newPlot(graphDiv, graphData); // 
+            const graphDiv = document.getElementById("graphDiv");
+            const graphData = JSON.parse(data.graph);
+            Plotly.newPlot(graphDiv, graphData);
         })
         .catch(error => {
             console.error("Fetch error:", error);
-        }); //
+        });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    // อาจจะทำการเรียกฟังก์ชันหรือทำอย่างอื่นตามความต้องการ
+    // เช่น BtnClick(); ถ้าคุณต้องการให้ทำงานทันทีเมื่อหน้าเว็บโหลดเสร็จ
 });

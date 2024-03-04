@@ -18,6 +18,7 @@ AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/mai
 AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%204.docx
 
 AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%209%2B10.docx
+
 --------------------------------------------
 
 Lecture form README.md

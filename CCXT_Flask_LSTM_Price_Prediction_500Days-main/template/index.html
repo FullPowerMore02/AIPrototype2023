@@ -1,28 +1,29 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forecast</title>
+    <title>ETH Price Prediction</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../static/js.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/css.css">
 </head>
 <body>
-    <h1>Forecast</h1>
-    
-    <!-- Display the forecast graph -->
-    <div id="forecastGraph"></div>
-
-    <script>
-        // Make a request to the Flask server with a predefined num_dates parameter
-        fetch('/forecast?num_dates=3')
-            .then(response => response.json())
-            .then(data => {
-                // Parse the JSON response and update the forecastGraph div with the graph
-                var graphData = JSON.parse(data.graph);
-                Plotly.newPlot('forecastGraph', graphData.data, graphData.layout);
-            })
-            .catch(error => console.error('Error:', error));
-    </script>
+    <div id="header">
+        <h1>ETH Price Prediction</h1>
+    </div>
+    <br><br>
+    <label>จำนวนวันข้างหน้าที่ต้องการทำนาย</label>
+    <br>
+    <label>(ข้อมูลการทำนาย)</label>
+    <br>
+    <label>Time Frame: Day only</label>
+    <br><br>
+    <input type="number" id="num_dates" required>
+    <br><br>
+    <button type="btn" onclick="BtnClick()">สร้างกราฟผลการทำนาย</button>
+    <br><br>
+    <div id="graphDiv"></div>
+    <div id="predictions"></div>
 </body>
 </html>

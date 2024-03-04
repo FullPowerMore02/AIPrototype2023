@@ -2,8 +2,6 @@
 
 This repository contains an implementation of a ETH Price Prediction system using LSTM (Long Short-Term Memory) neural networks. The system utilizes the CCXT library for fetching historical stock price data, Flask for building a RESTful API, and TensorFlow for implementing the LSTM model. Additionally, it includes components written in JavaScript, HTML, and CSS for the frontend interface.
 
-The implementation works with real data, eliminating the need for CSV files or simulated datasets.
-
 ## Technologies Used
 - TensorFlow
 - Flask
@@ -12,8 +10,6 @@ The implementation works with real data, eliminating the need for CSV files or s
 - HTML
 - CSS
 
-## Acknowledgements
-This implementation is based on the work available at [guilhermegobbo/GOOG-STOCK-PRED](https://github.com/guilhermegobbo/GOOG-STOCK-PRED/tree/main).
 
 ## How to Use
 ### Windows
@@ -21,6 +17,9 @@ This implementation is based on the work available at [guilhermegobbo/GOOG-STOCK
 2. Navigate to the project directory.
 3. Run the following command:
     ```
+    rm -rf eth_lstm_model.h5
+    rm -rf eth_scaler.pkl
+    python model_explorer.py
     python api.py
     ```
 
@@ -29,5 +28,8 @@ This implementation is based on the work available at [guilhermegobbo/GOOG-STOCK
 2. Navigate to the project directory.
 3. Run the following command:
     ```
+    rm -rf eth_lstm_model.h5
+    rm -rf eth_scaler.pkl
+    python3 model_explorer.py
     python3 api.py
     ```

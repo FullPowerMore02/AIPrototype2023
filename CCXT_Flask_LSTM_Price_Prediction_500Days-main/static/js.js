@@ -22,6 +22,5 @@ function BtnClick() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    // อาจจะทำการเรียกฟังก์ชันหรือทำอย่างอื่นตามความต้องการ
-    // เช่น BtnClick(); ถ้าคุณต้องการให้ทำงานทันทีเมื่อหน้าเว็บโหลดเสร็จ
+    
 });

@@ -9,15 +9,15 @@ https://github.com/FullPowerMore02/AIPrototype2023/tree/main/binanceccxt
 --------------------------------------------
 Downloadable lectures
 
-AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%201.docx
+AI Prototype Class 1 : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%201.docx
 
-AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%202.docx
+AI Prototype Class 2 : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%202.docx
 
-AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%203.docx
+AI Prototype Class 3 : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%203.docx
 
-AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%204.docx
+AI Prototype Class 4 : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%204.docx
 
-AI Prototype Class : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%209%2B10.docx
+AI Prototype Class 9 and 10 : https://github.com/FullPowerMore02/AIPrototype2023/blob/main/AI%20Prototype%20Class%209%2B10.docx
 
 --------------------------------------------
 

@@ -21,7 +21,7 @@ scaler_path = 'eth_scaler.pkl'
 print(model_path)
 time_steps = 20 
 
-model = load_model(model_path) # modelo LSTM
+model = load_model(model_path) # LSTM
 scaler = joblib.load(scaler_path) # scaler MinMaxScaler
 
 
@@ -49,7 +49,7 @@ CORS(app)
 
 
 
-# função para predição com nosso modelo LSTM
+# LSTM
 def predict_values_for_future_dates(model, data, start_date, num_dates, time_steps):
     predictions = []
 
@@ -77,11 +77,11 @@ def home():
 
 
 
-# rota para prever os valores futuros com base na quantidade de dias (num_dates)
+# (num_dates)
 @app.route('/forecast/<int:num_dates>', methods=['GET'])
 def forecast(num_dates):
     try:
-        # calcular os valores futuros (em USD $)
+        # calculate  (USD $)
         predicted_values = predict_values_for_future_dates(model, last_results, start_date, int(num_dates)+1, time_steps)
         print(predicted_values)
         NEW_DATES = [start_date]
@@ -94,7 +94,7 @@ def forecast(num_dates):
         date_value_pairs = {}
         for date, prediction in zip(RESULTS.index, predictions):
             date_value_pairs[str(date)] = prediction
-        date_value_pairs.pop(next(iter(date_value_pairs))) # ignorar o primeiro valor (que é com o start_date)
+        date_value_pairs.pop(next(iter(date_value_pairs))) # (start_date)
         forecast_data = {
             'num_dates': date_value_pairs
             }
@@ -102,7 +102,7 @@ def forecast(num_dates):
         fig.update_xaxes(title_text='DATA')
         fig.update_yaxes(title_text='VALUE IN USD$')
 
-        forecast_data['graph'] = fig.to_json() # adicionar o gráfico em json ao dict 'forecast'
+        forecast_data['graph'] = fig.to_json() # 'forecast'
 
         return jsonify(forecast_data)
 

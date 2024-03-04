@@ -5,15 +5,8 @@ https://fullpowermore02.github.io/
 
 Webapp
 
-https://github.com/FullPowerMore02/AIPrototype2023/blob/main/lstm.py
+https://github.com/FullPowerMore02/AIPrototype2023/tree/main/binanceccxt
 
-subprocess
-
-https://github.com/FullPowerMore02/AIPrototype2023/blob/main/python_subprocess.py
-
-Flask สำหรับ webapp
-
-https://github.com/FullPowerMore02/AIPrototype2023/blob/main/firstflask.py
 
 
 AI Prototype Class1
@@ -307,6 +300,15 @@ python
 5. main function (flow follow after this) เริ่มริ่ จาก รับรั ค่าตัวแปร input_V = parse_input() {function} print(the input xx i (ค่าตัวแปร x ไม่มีก็=7) print("we are in the main function") function การคูณ 9*ตัวแปร x print(”hello”) function 
 3 รอบ 1,2 เลขอะไรก็ได้ 
 3 แค่ num
+
+subprocess
+
+https://github.com/FullPowerMore02/AIPrototype2023/blob/main/python_subprocess.py
+
+Flask สำหรับ webapp
+
+https://github.com/FullPowerMore02/AIPrototype2023/blob/main/firstflask.py
+
 --------------------------------------------
 AI Prototype Class 9+10
 
